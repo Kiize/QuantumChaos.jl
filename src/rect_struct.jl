@@ -24,3 +24,35 @@ function RectBilliard_as_vec(B::RectBilliard)
     return [B.Lx, B.Ly, B.Nx, B.Ny]
 end
 
+# Definition of a rectangle, not necesserily starting in the origin.
+struct RectGeom
+    Lx_min::Float64
+    Lx_max::Float64
+    Ly_min::Float64
+    Ly_max::Float64
+end
+
+# Definition of a circle with center (x_center, y_center) and radius = radius.
+struct CircGeom
+    radius::Float64
+    x_center::Float64
+    y_center::Float64
+end
+
+# Definition of the Bunimovich Stadium, which is a rectangle capped by two semicircles 
+struct BunStadium 
+    rect::RectGeom
+    circ_right::CircGeom
+    circ_left::CircGeom
+end
+
+# Constructor for the Bunimovich Stadium using only the rectangle as we can deduce the circles.
+BunStadium(R::RectGeom) = begin
+    height = R.Ly_max - R.Ly_min
+    radius = height/2.0
+    circ_right = CircGeom(radius, R.Lx_max, R.Ly_min + radius)
+    circ_left = CircGeom(radius, R.Lx_min, R.Ly_min + radius)
+    return BunStadium(R, circ_right, circ_left)
+end
+
+

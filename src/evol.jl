@@ -1,7 +1,3 @@
-using LinearAlgebra
-using GLMakie
-include("helper.jl")    # Import the RectBilliard struct.
-
 # Define the evolution of a generic state psi_t.
 # We write a generic state psi_t as a superposition of the eigenstates psi_vecs: psi_t = ∑ᵢ c[i] psi_vecs[i].
 # We then now that eigenvectors evolve in time with a phase given by their energy E.
