@@ -20,4 +20,17 @@ E_ana = analytical_energies(B, k)
 
 @testset "Comparing numerical to analytical energies" begin
     @test isapprox(E_num, E_ana; rtol=1e-3)
+
+    # Check normalization
+    @test Ψ_vecs[:, 1]' * Ψ_vecs[:, 1] ≈ 1.0 atol=1e-6
+    @test Ψ_vecs[:, 5]' * Ψ_vecs[:, 5] ≈ 1.0 atol=1e-6
+    @test Ψ_vecs[:, 19]' * Ψ_vecs[:, 19] ≈ 1.0 atol=1e-6
+
+
+    # Check orthogonality
+    @test Ψ_vecs[:, 1]' * Ψ_vecs[:, 2] ≈ 0.0 atol=1e-6
+    @test Ψ_vecs[:, 5]' * Ψ_vecs[:, 19] ≈ 0.0 atol=1e-6
+    @test Ψ_vecs[:, 4]' * Ψ_vecs[:, 3] ≈ 0.0 atol=1e-6
+
+
 end 

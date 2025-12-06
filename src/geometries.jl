@@ -150,7 +150,7 @@ end
 
 # P matrix. The P matrix contains the eigenfunctions of the rectangular billiard evaluated on the grid points.
 # Given the billiard of length Lx × Ly we can discretize it and construct the grid x_grid × y_grid. 
-function calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly)
+function calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly, S::BunStadium)
     len = length(flattened_states)
     Nx, Ny = length(x_grid), length(y_grid) # In principle we could implement the case where Nx ≠ Ny.
     M = Nx * Ny
@@ -179,10 +179,10 @@ function calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly)
 end
 
 # Function to evaluate the state ψ = ∑ₘ cₘ ϕₘ, where cₘ = coeff are the eigenstates evaluated in stadium_diag.jl.
-function eigenfun(coeff, flattened_states, ik::Int, x_grid, y_grid, Lx, Ly)
+function eigenfun(coeff, flattened_states, ik::Int, x_grid, y_grid, Lx, Ly, S::BunStadium)
     c_k = coeff[:, ik]
     N_grid = length(x_grid)
-    P, Mask_linear = calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly)
+    P, Mask_linear = calc_P_matrix(flattened_states, x_grid, y_grid, Lx, Ly, S)
 
     # Psi_k_linear is a vector of length M.
     Psi_k_linear = P * c_k 
@@ -194,7 +194,7 @@ end
 
 
 # Function to plot the ik-th eigenstate, it also saves the plots in the "figs" folder.
-function plot_stadium_eigenstate(k, R::RectGeom, N::Int, f::Figure, f2::Figure, flattened_states, coeff, ik::Int)
+function plot_stadium_eigenstate(k, R::RectGeom, N::Int, f::Figure, f2::Figure, flattened_states, coeff, ik::Int, S::BunStadium)
     Lx = R.Lx_max - R.Lx_min
     Ly = R.Ly_max - R.Ly_min
     
@@ -207,7 +207,7 @@ function plot_stadium_eigenstate(k, R::RectGeom, N::Int, f::Figure, f2::Figure, 
     
     # Reshape it in 2D array for plotting.
     #psi_2D = eigenfun_old(x_int, y_int, flattened_states, coeff, k, R)
-    psi_2D = eigenfun(coeff, flattened_states, ik, x_int, y_int, Lx, Ly)
+    psi_2D = eigenfun(coeff, flattened_states, ik, x_int, y_int, Lx, Ly, S)
     #psi_2D = reshape(psi_vector, N, N)
 
     # Heatmap.
