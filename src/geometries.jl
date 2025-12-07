@@ -108,9 +108,8 @@ rect_eigenfun(R, x, y, flattened_states_sorted) = begin
     return rect_eigenfun(R, nx, ny, x, y)
 end
 
-# Returns v_{nm}       
+# Returns v_{nm}.      
 function integration_on_II(R::RectGeom, S::BunStadium, n::Int, m::Int, x_vals::StepRangeLen{Float64}, y_vals::StepRangeLen{Float64}, flattened_states::Vector{Tuple{Float64, Int64, Int64}})
-    # Old code, faster.
     dx = step(x_vals)
     dy = step(y_vals)
 
@@ -125,15 +124,6 @@ function integration_on_II(R::RectGeom, S::BunStadium, n::Int, m::Int, x_vals::S
             end
         end
     end
-
-    # New code using Integrals.
-    #= 
-    f(u, p) = rect_eigenfun(R, n, u[1], u[2]) * rect_eigenfun(R, m, u[1], u[2]) * !isin_stadium(S, u[1], u[2])
-    domain = ([x_vals[1], y_vals[1]], [x_vals[end], y_vals[end]])
-    prob = IntegralProblem(f, domain)
-    sol = solve(prob, HCubatureJL(); reltol = 1e-3, abstol = 1e-3)
-
-    integral = sol.u =#
 
     return integral
 end

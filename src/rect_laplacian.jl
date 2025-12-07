@@ -73,8 +73,8 @@ function analytical_energies(B::RectBilliard, k::Int)
     return energies_ana
 end
 
-# Function to compare numerical and analytical eigenvalues, it also saves the comparison plot in the "figs" folder.
-function compare_energies(energies, B::RectBilliard, k)
+# Function to compare numerical and analytical eigenvalues, it also saves the comparison plot in the save_path folder.
+function compare_energies(energies, B::RectBilliard, k; save_path::String="figs")
     energies_ana = analytical_energies(B, k)
 
     # Plot comparison.
@@ -83,6 +83,12 @@ function compare_energies(energies, B::RectBilliard, k)
     scatter!(ax, energies, energies_ana, label="Energies")
     lines!(ax, energies_ana[1]:energies_ana[end], energies_ana[1]:energies_ana[end], color=:red, label="y=x", linewidth=1)
     axislegend(position = :rb)
-    save("figs/rect_energy_comparison_$k.png", f)
+    
+    # Residual plots.
+    ax2 = Axis(f[2, 1], xlabel="Index", ylabel="Residual |E_num - E_ana|/E_ana")
+    residuals = abs.(energies - energies_ana) ./ energies_ana
+    scatter!(ax2, residuals)
+
+    save("$save_path/rect_energy_comparison_$k.png", f)
     f
 end
