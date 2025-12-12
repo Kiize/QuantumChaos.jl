@@ -1,6 +1,6 @@
 name = "QuantumChaos"
 uuid = "3c8cddf9-0b35-4818-b39a-cb173209c605"
-version = "1.0.0-DEV"
+version = "1.0.0"
 authors = ["Kiize"]
 
 [deps]
